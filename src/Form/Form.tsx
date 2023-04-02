@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import "./Form.css";
 
 
@@ -8,27 +8,70 @@ export interface UserInfo {
     email: any;
 }
 
+interface actionProps {
+    type: 'FIRSTNAME' | 'LASTNBAME' | 'EMAIL' | 'SUBMITTED' | 'ALLVALID'
+    payload: any
+}
+
+const reducer = (state: any, action: actionProps) => {
+    switch (action.type) {
+        case 'FIRSTNAME':
+            return {
+                ...state , firstName: action.payload
+            };
+        case 'LASTNBAME':
+            return {
+                ...state , lastName: action.payload
+            };
+        case 'EMAIL':
+            return {
+                ...state , email: action.payload
+            };
+        case 'SUBMITTED':
+            return {
+                ...state , submitted: action.payload
+            };
+        case 'ALLVALID':
+            return {
+                ...state , allValid: action.payload
+            };
+        default:
+            return {
+                state
+            };
+    }
+}
 
 function Form() {
 
-    const [firstNameData, setFirstNameData] = useState<string>(""); // state for first name input
-    const [lastNameData, setLastNameData] = useState<string>(""); // State for last name input
-    const [emailData, setEmailData] = useState<string>(""); // State for email input
-    const [submitted, setSubmitted] = useState<boolean>(false); // State for POST data
-    const [allValid, setAllValid] = useState<boolean>(false); // State for input data check 
+
+    const [state, dispatch] = useReducer(reducer, {
+        
+        firstName: '',
+        lastName: '',
+        email: '',
+        submitted: false,
+        allValid: false 
+    })
+
+    // const [firstNameData, setFirstNameData] = useState<string>(""); // state for first name input
+    // const [lastNameData, setLastNameData] = useState<string>(""); // State for last name input
+    // const [emailData, setEmailData] = useState<string>(""); // State for email input
+    // const [submitted, setSubmitted] = useState<boolean>(false); // State for POST data
+    // const [allValid, setAllValid] = useState<boolean>(false); // State for input data check 
 
     const submitHandler = (event: any) => {
         event.preventDefault()
 
-        setSubmitted(true)
+        dispatch({ type: 'SUBMITTED' , payload :true})
 
-        if (firstNameData.length !== 0 && lastNameData.length !== 0 && emailData.length !== 0) {
-            setAllValid(true)
+        if (state.firstName.length !== 0 && state.lastName.length !== 0 && state.email.length !== 0) {
+            dispatch({ type: 'ALLVALID' , payload :true})
 
-            let userFormInput : UserInfo = {
-                firstName: firstNameData,
-                lastName: lastNameData,
-                email: emailData,
+            let userFormInput: UserInfo = {
+                firstName: state.firstName,
+                lastName: state.lastName,
+                email: state.email,
             }
 
             fetch("https://formvalidation-8094b-default-rtdb.asia-southeast1.firebasedatabase.app/users.json", {
@@ -37,14 +80,14 @@ function Form() {
             }).then(res => (console.log(res)))
 
             setTimeout(() => {
-                setAllValid(false)
+                dispatch({ type: 'ALLVALID' , payload :false})
             }, 3000);
 
-            setSubmitted(false)
+            dispatch({ type: 'SUBMITTED' , payload :false})
 
-            setFirstNameData("")
-            setLastNameData("")
-            setEmailData("")
+            dispatch({type: 'FIRSTNAME' , payload: ''})
+            dispatch({type: 'LASTNBAME' , payload: ''})
+            dispatch({type: "EMAIL" , payload: ''})
 
         }
     }
@@ -52,43 +95,43 @@ function Form() {
     return (
         <div className="form-container">
             <form className="register-form" autoComplete="off" onSubmit={submitHandler}>
-                {submitted && allValid && (
+                {state.submitted && state.allValid && (
                     <div className="success-message">Success! Thank you for registering</div>
                 )}
                 <input
                     id="first-name"
-                    value={firstNameData}
-                    onChange={(event) => setFirstNameData(event.target.value)}
+                    value={state.firstName}
+                    onChange={(event) => dispatch({ type: 'FIRSTNAME' , payload: event.target.value})}
                     className="form-field"
                     type="text"
                     placeholder="First Name"
                     name="firstName"
                 />
-                {submitted && firstNameData.length === 0 && (
+                {state.submitted && state.firstName.length === 0 && (
                     <span id="first-name-error">Please enter a first name</span>
                 )}
                 <input
                     id="last-name"
-                    value={lastNameData}
-                    onChange={(event) => setLastNameData(event.target.value)}
+                    value={state.lastName}
+                    onChange={(event) => dispatch({ type : 'LASTNBAME', payload: event.target.value})}
                     className="form-field"
                     type="text"
                     placeholder="Last Name"
                     name="lastName"
                 />
-                {submitted && lastNameData.length === 0 && (
+                {state.submitted && state.lastName.length === 0 && (
                     <span id="first-name-error">Please enter a Last Name</span>
                 )}
                 <input
                     id="email"
-                    value={emailData}
-                    onChange={(event) => setEmailData(event.target.value)}
+                    value={state.email}
+                    onChange={(event) => dispatch({ type: 'EMAIL' , payload: event.target.value})}
                     className="form-field"
                     type="text"
                     placeholder="Email"
                     name="email"
                 />
-                {submitted && emailData.length === 0 && (
+                {state.submitted && state.email.length === 0 && (
                     <span id="first-name-error">Please enter a Email</span>
                 )}
                 <button className="form-field" type="submit">
