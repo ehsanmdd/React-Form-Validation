@@ -3,7 +3,7 @@
 
 
 - Form validation.
-- Front-End using HTML , CSS , React-Icons , React-Bootstrap , React 
+- Front-End using HTML , CSS , React-Icons , React-Bootstrap , React , TypeScript
 - Back-End using Firebase , API 
 - In this project using API Methods for dealing Back-End side
 

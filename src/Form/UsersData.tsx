@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import "./UsersData.css"
 import Table from 'react-bootstrap/Table';
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
+import { UserInfo } from './Form';
 
 
 
@@ -13,16 +14,16 @@ import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 
 function UsersData() {
 
-    const [users, setUsers] = useState([]) 
-    const [userID, setUserID] = useState("")
-    const [getData, setGetData] = useState(false)
-    const [showDeleteModal, setShowDeleteModal] = useState(false)
-    const [showEditModal, setShowEditModal] = useState(false)
+    const [users, setUsers] = useState<any[]>([]) 
+    const [userID, setUserID] = useState<string>("")
+    const [getData, setGetData] = useState<boolean>(false)
+    const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
+    const [showEditModal, setShowEditModal] = useState<boolean>(false)
 
     // State for check data inside the inputs
-    const [firtsNameData, setFirstNameData] = useState("");
-    const [lastNameData, setLastNameData] = useState("");
-    const [emailData, setEmailData] = useState("");
+    const [firtsNameData, setFirstNameData] = useState<string>("");
+    const [lastNameData, setLastNameData] = useState<string>("");
+    const [emailData, setEmailData] = useState<string>("");
 
 
     // Fetching Data realTime 
@@ -40,7 +41,7 @@ function UsersData() {
 
     // geting Data and edited in form 
     useEffect(() => {
-        let mainUserInfo = users.find((userInfo) => userInfo[0] == userID, [userID])
+        let mainUserInfo = users.find((userInfo) => userInfo[0] === userID, [userID])
 
         if (mainUserInfo) {
             setFirstNameData(mainUserInfo[1].firstName)
@@ -61,7 +62,7 @@ function UsersData() {
     }
 
     const userEdit = async () => {
-        let newUserInfo = {
+        let newUserInfo : UserInfo = {
             firstName: firtsNameData,
             lastName: lastNameData,
             email: emailData,

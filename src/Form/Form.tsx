@@ -1,16 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Form.css";
+
+
+export interface UserInfo {
+    firstName: string;
+    lastName: string;
+    email: any;
+}
 
 
 function Form() {
 
-    const [firstNameData, setFirstNameData] = useState(""); // state for first name input
-    const [lastNameData, setLastNameData] = useState(""); // State for last name input
-    const [emailData, setEmailData] = useState(""); // State for email input
-    const [submitted, setSubmitted] = useState(false); // State for POST data
-    const [allValid, setAllValid] = useState(false); // State for input data check 
+    const [firstNameData, setFirstNameData] = useState<string>(""); // state for first name input
+    const [lastNameData, setLastNameData] = useState<string>(""); // State for last name input
+    const [emailData, setEmailData] = useState<string>(""); // State for email input
+    const [submitted, setSubmitted] = useState<boolean>(false); // State for POST data
+    const [allValid, setAllValid] = useState<boolean>(false); // State for input data check 
 
-    const submitHandler = (event) => {
+    const submitHandler = (event: any) => {
         event.preventDefault()
 
         setSubmitted(true)
@@ -18,7 +25,7 @@ function Form() {
         if (firstNameData.length !== 0 && lastNameData.length !== 0 && emailData.length !== 0) {
             setAllValid(true)
 
-            let userFormInput = {
+            let userFormInput : UserInfo = {
                 firstName: firstNameData,
                 lastName: lastNameData,
                 email: emailData,
