@@ -10,30 +10,30 @@ export interface UserInfo {
 
 interface actionProps {
     type: 'FIRSTNAME' | 'LASTNBAME' | 'EMAIL' | 'SUBMITTED' | 'ALLVALID'
-    payload: any
+    payload?: any
 }
 
 const reducer = (state: any, action: actionProps) => {
     switch (action.type) {
         case 'FIRSTNAME':
             return {
-                ...state , firstName: action.payload
+                ...state, firstName: ""
             };
         case 'LASTNBAME':
             return {
-                ...state , lastName: action.payload
+                ...state, lastName: ""
             };
         case 'EMAIL':
             return {
-                ...state , email: action.payload
+                ...state, email: ""
             };
         case 'SUBMITTED':
             return {
-                ...state , submitted: action.payload
+                ...state, submitted: true
             };
         case 'ALLVALID':
             return {
-                ...state , allValid: action.payload
+                ...state, allValid: true
             };
         default:
             return {
@@ -46,12 +46,12 @@ function Form() {
 
 
     const [state, dispatch] = useReducer(reducer, {
-        
+
         firstName: '',
         lastName: '',
         email: '',
         submitted: false,
-        allValid: false 
+        allValid: false
     })
 
     // const [firstNameData, setFirstNameData] = useState<string>(""); // state for first name input
@@ -63,10 +63,10 @@ function Form() {
     const submitHandler = (event: any) => {
         event.preventDefault()
 
-        dispatch({ type: 'SUBMITTED' , payload :true})
+        dispatch({ type: 'SUBMITTED', payload: true })
 
         if (state.firstName.length !== 0 && state.lastName.length !== 0 && state.email.length !== 0) {
-            dispatch({ type: 'ALLVALID' , payload :true})
+            dispatch({ type: 'ALLVALID'})
 
             let userFormInput: UserInfo = {
                 firstName: state.firstName,
@@ -80,14 +80,14 @@ function Form() {
             }).then(res => (console.log(res)))
 
             setTimeout(() => {
-                dispatch({ type: 'ALLVALID' , payload :false})
+                dispatch({ type: 'ALLVALID' })
             }, 3000);
 
-            dispatch({ type: 'SUBMITTED' , payload :false})
+            dispatch({ type: 'SUBMITTED' })
 
-            dispatch({type: 'FIRSTNAME' , payload: ''})
-            dispatch({type: 'LASTNBAME' , payload: ''})
-            dispatch({type: "EMAIL" , payload: ''})
+            dispatch({ type: 'FIRSTNAME'})
+            dispatch({ type: 'LASTNBAME'})
+            dispatch({ type: "EMAIL" })
 
         }
     }
@@ -101,7 +101,7 @@ function Form() {
                 <input
                     id="first-name"
                     value={state.firstName}
-                    onChange={(event) => dispatch({ type: 'FIRSTNAME' , payload: event.target.value})}
+                    onChange={(event) => dispatch({ type: 'FIRSTNAME', payload: event.target.value })}
                     className="form-field"
                     type="text"
                     placeholder="First Name"
@@ -113,7 +113,7 @@ function Form() {
                 <input
                     id="last-name"
                     value={state.lastName}
-                    onChange={(event) => dispatch({ type : 'LASTNBAME', payload: event.target.value})}
+                    onChange={(event) => dispatch({ type: 'LASTNBAME', payload: event.target.value })}
                     className="form-field"
                     type="text"
                     placeholder="Last Name"
@@ -125,7 +125,7 @@ function Form() {
                 <input
                     id="email"
                     value={state.email}
-                    onChange={(event) => dispatch({ type: 'EMAIL' , payload: event.target.value})}
+                    onChange={(event) => dispatch({ type: 'EMAIL', payload: event.target.value })}
                     className="form-field"
                     type="text"
                     placeholder="Email"
